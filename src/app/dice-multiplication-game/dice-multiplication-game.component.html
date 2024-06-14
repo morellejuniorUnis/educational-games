@@ -1,0 +1,19 @@
+<div class="game-container">
+  <mat-card class="card">
+    <h2>Sortear Multiplicação</h2>
+    <p>Sortear e resolver a multiplicação:</p>
+    <div class="dice" [ngClass]="{'rolling': rolling}">
+      <span>{{ die1 }}</span> x <span>{{ die2 }}</span>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="checkAnswer()">
+      <mat-form-field>
+        <input matInput formControlName="answer" type="number" placeholder="Sua resposta" [disabled]="rolling">
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="rolling">Responder</button>
+    </form>
+    <p class="feedback">{{ feedbackMessage }}</p>
+    <p>Pontuação: {{ score }} | Rodadas: {{ round }}</p>
+    <button mat-raised-button color="accent" (click)="resetGame()">Reiniciar Jogo</button>
+  </mat-card>
+
+</div>

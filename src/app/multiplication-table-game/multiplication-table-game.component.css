@@ -1,0 +1,25 @@
+.game-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  table {
+    margin: auto;
+    border-collapse: collapse;
+    overflow: scroll
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .error {
+    border: 2px solid red;
+  }
+  
+  button {
+    margin-top: 20px;
+    margin-right: 10px;
+  }
+  

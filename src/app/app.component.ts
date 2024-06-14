@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MultiplicationGameComponent } from './multiplication-game/multiplication-game.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTabsModule} from '@angular/material/tabs';
+import { MultiplicationTableGameComponent } from './multiplication-table-game/multiplication-table-game.component';
+import { DiceMultiplicationGameComponent } from './dice-multiplication-game/dice-multiplication-game.component';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [CommonModule, MultiplicationGameComponent, MultiplicationTableGameComponent, DiceMultiplicationGameComponent ,MatTabsModule, MatIconModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'educational-games';

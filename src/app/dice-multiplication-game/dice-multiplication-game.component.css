@@ -1,0 +1,39 @@
+.game-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.card {
+  display: inline-block;
+  padding: 20px;
+}
+
+.dice {
+  font-size: 2em;
+  margin: 20px 0;
+  display: inline-block;
+  width: 80px;
+  text-align: center;
+}
+
+.rolling {
+  animation: roll 0.1s linear infinite;
+}
+
+@keyframes roll {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.feedback {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button {
+  margin-top: 10px;
+}
