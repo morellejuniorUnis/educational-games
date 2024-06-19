@@ -7,8 +7,6 @@ import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-dice-multiplication-game',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatInputModule, MatButtonModule, MatCardModule],
   templateUrl: './dice-multiplication-game.component.html',
   styleUrls: ['./dice-multiplication-game.component.css']
 })

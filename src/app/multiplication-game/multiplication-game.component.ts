@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ApiService } from '../service/api.service';
 
 interface Question {
   text: string;
@@ -9,8 +9,6 @@ interface Question {
 
 @Component({
   selector: 'app-multiplication-game',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './multiplication-game.component.html',
   styleUrls: ['./multiplication-game.component.css']
 })
@@ -23,9 +21,28 @@ export class MultiplicationGameComponent implements OnInit {
   feedbackMessage: string | null = null;
   feedbackColor: string = 'green';
   answers: number[] = [];
+  sectionKey: string = '';
+
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
     this.startGame();
+  }
+
+  startGame() {
+    this.apiService.createNewSection().subscribe(
+      response => {
+        this.sectionKey = response.key;
+        this.score = 0;
+        this.currentQuestionIndex = 0;
+        this.questions = this.generateQuestions();
+        this.setCurrentQuestion();
+        this.feedbackMessage = null;
+      },
+      error => {
+        console.error('Erro ao criar nova seção:', error);
+      }
+    );
   }
 
   generateQuestions(): Question[] {
@@ -45,14 +62,6 @@ export class MultiplicationGameComponent implements OnInit {
       });
     }
     return questions;
-  }
-
-  startGame() {
-    this.score = 0;
-    this.currentQuestionIndex = 0;
-    this.questions = this.generateQuestions();
-    this.setCurrentQuestion();
-    this.feedbackMessage = null;
   }
 
   setCurrentQuestion() {
@@ -75,11 +84,19 @@ export class MultiplicationGameComponent implements OnInit {
         this.feedbackColor = 'red';
       }
       this.currentQuestionIndex++;
-      if (this.currentQuestionIndex < this.totalQuestions) {
-        this.setCurrentQuestion();
-      } else {
-        this.currentQuestion = null;
-      }
+      this.apiService.updateNextQuestion(this.sectionKey, this.currentQuestionIndex).subscribe(
+        response => {
+          console.log('Próxima pergunta atualizada:', response);
+          if (this.currentQuestionIndex < this.totalQuestions) {
+            this.setCurrentQuestion();
+          } else {
+            this.currentQuestion = null;
+          }
+        },
+        error => {
+          console.error('Erro ao atualizar a próxima pergunta:', error);
+        }
+      );
     }
   }
 }
