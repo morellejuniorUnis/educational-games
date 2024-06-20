@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card'; // Importação do MatCardModule
+import { MatCardModule } from '@angular/material/card'; 
 import { MultiplicationGameComponent } from './multiplication-game/multiplication-game.component';
 import { DiceMultiplicationGameComponent } from './dice-multiplication-game/dice-multiplication-game.component';
 

@@ -32,8 +32,8 @@ export class DiceMultiplicationGameComponent implements OnInit {
 
   rollDice() {
     this.rolling = true;
-    const rollDuration = 1000; // duração da rolagem em ms
-    const rollInterval = 100; // intervalo entre cada rolagem em ms
+    const rollDuration = 1000; 
+    const rollInterval = 100;
     let elapsed = 0;
 
     const rollIntervalId = setInterval(() => {

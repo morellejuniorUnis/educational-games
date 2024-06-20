@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'https://faculapi.avlq.online/sections';
+  private baseUrl = '/sections'; 
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +24,4 @@ export class ApiService {
       next_question_number: nextQuestionNumber
     });
   }
-
-  
 }

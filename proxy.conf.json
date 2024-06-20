@@ -1,0 +1,8 @@
+{
+  "/sections": {
+    "target": "https://faculapi.avlq.online",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

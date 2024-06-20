@@ -14,10 +14,15 @@
         <div class="text-container">
           <p>{{ currentQuestion.text }}</p>
         </div>
-        <button *ngFor="let answer of answers" (click)="checkAnswer(answer)">
+        <button (click)="checkAnswer(answers[0])">
           <span class="shadow"></span>
           <span class="edge"></span>
-          <span class="front text"> {{ answer }} </span>
+          <span class="front text"> {{ answers[0] }} </span>
+        </button>
+        <button (click)="checkAnswer(answers[1])">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front text"> {{ answers[1] }} </span>
         </button>
       </div>
       <div *ngIf="feedbackMessage && currentQuestion" [ngStyle]="{'color': feedbackColor}" class="feedback-message">
@@ -25,8 +30,7 @@
       </div>
       <div *ngIf="!currentQuestion && currentQuestionIndex >= totalQuestions">
         <p>
-          Fim do jogo! Você acertou {{ score }} de
-          {{ totalQuestions }} perguntas.
+          Fim do jogo! Você acertou {{ correctAnswers }} de {{ totalQuestions }} perguntas.
         </p>
         <div class="buttonStart-container">
           <button class="button" type="button" (click)="startGame()">
@@ -37,4 +41,11 @@
       </div>
     </div>
   </div>
+</div>
+<div *ngIf="token">
+  <p>Token: {{ token }}</p>
+  <button (click)="copyToken()">Copiar Token</button>
+</div>
+<div *ngIf="lastResponse">
+  <p>Última resposta: {{ lastResponse }}</p>
 </div>
