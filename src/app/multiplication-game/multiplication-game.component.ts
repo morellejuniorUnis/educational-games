@@ -11,7 +11,7 @@ interface Question {
 @Component({
   selector: 'app-multiplication-game',
   templateUrl: './multiplication-game.component.html',
-  styleUrls: ['./multiplication-game.component.css']
+  styleUrls: ['./multiplication-game.component.css'],
 })
 export class MultiplicationGameComponent implements OnInit, OnDestroy {
   questions: Question[] = [];
@@ -29,6 +29,7 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
   pollingSubscription: Subscription | undefined;
   correctAnswers = 0;
   incorrectAnswers = 0;
+  tokenCopied = false;
 
   constructor(private apiService: ApiService) {}
 
@@ -44,7 +45,7 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
 
   startGame() {
     this.apiService.createNewSection().subscribe(
-      response => {
+      (response) => {
         this.sectionKey = response.key;
         this.token = response.key;
         this.score = 0;
@@ -54,10 +55,11 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
         this.questions = this.generateQuestions();
         this.setCurrentQuestion();
         this.feedbackMessage = null;
+        this.tokenCopied = false;
 
         this.startPolling();
       },
-      error => {
+      (error) => {
         console.error('Erro ao criar nova seção:', error);
       }
     );
@@ -76,7 +78,7 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
       questions.push({
         text: `${num1} x ${num2}`,
         correctAnswer: correctAnswer,
-        incorrectAnswer: incorrectAnswer
+        incorrectAnswer: incorrectAnswer,
       });
     }
     return questions;
@@ -86,7 +88,10 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
     if (this.currentQuestionIndex < this.totalQuestions) {
       this.currentQuestion = this.questions[this.currentQuestionIndex];
 
-      this.answers = [this.currentQuestion.correctAnswer, this.currentQuestion.incorrectAnswer].sort(() => Math.random() - 0.5);
+      this.answers = [
+        this.currentQuestion.correctAnswer,
+        this.currentQuestion.incorrectAnswer,
+      ].sort(() => Math.random() - 0.5);
     } else {
       this.currentQuestion = null;
     }
@@ -105,38 +110,45 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
         this.feedbackMessage = 'Você errou!';
         this.feedbackColor = 'red';
       }
-      this.apiService.updateNextQuestion(this.sectionKey, this.currentQuestionIndex + 1).subscribe(
-        response => {
-          this.currentQuestionIndex++;
-          if (this.currentQuestionIndex < this.totalQuestions) {
-            this.setCurrentQuestion();
-            this.getSectionInfo();
-          } else {
-            this.currentQuestion = null;
+      this.apiService
+        .updateNextQuestion(this.sectionKey, this.currentQuestionIndex + 1)
+        .subscribe(
+          (response) => {
+            this.currentQuestionIndex++;
+            if (this.currentQuestionIndex < this.totalQuestions) {
+              this.setCurrentQuestion();
+              this.getSectionInfo();
+            } else {
+              this.currentQuestion = null;
+            }
+          },
+          (error) => {
+            console.error('Erro ao atualizar a próxima pergunta:', error);
           }
-        },
-        error => {
-          console.error('Erro ao atualizar a próxima pergunta:', error);
-        }
-      );
+        );
     }
   }
 
   getSectionInfo() {
     this.apiService.getSectionInfo(this.sectionKey).subscribe(
-      response => {
+      (response) => {
         console.log('Informações da seção:', response);
         this.lastResponse = response.last_response;
         const updatedAt = response.updated_at;
 
-        if ((this.lastResponse === '1' || this.lastResponse === '2') && updatedAt !== this.lastUpdatedAt) {
-          this.lastUpdatedAt = updatedAt; 
-          
+        if (
+          (this.lastResponse === '1' || this.lastResponse === '2') &&
+          updatedAt !== this.lastUpdatedAt
+        ) {
+          this.lastUpdatedAt = updatedAt;
+
           const lastResponseNumber = parseInt(this.lastResponse, 10);
           const correctAnswer = this.currentQuestion?.correctAnswer;
 
-          if ((lastResponseNumber === 1 && this.answers[0] === correctAnswer) ||
-              (lastResponseNumber === 2 && this.answers[1] === correctAnswer)) {
+          if (
+            (lastResponseNumber === 1 && this.answers[0] === correctAnswer) ||
+            (lastResponseNumber === 2 && this.answers[1] === correctAnswer)
+          ) {
             this.correctAnswers++;
             this.feedbackMessage = 'Você acertou!';
             this.feedbackColor = 'green';
@@ -154,7 +166,7 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
           }
         }
       },
-      error => {
+      (error) => {
         console.error('Erro ao obter informações da seção:', error);
       }
     );
@@ -167,10 +179,14 @@ export class MultiplicationGameComponent implements OnInit, OnDestroy {
   }
 
   copyToken() {
-    navigator.clipboard.writeText(this.token).then(() => {
-      console.log('Token copiado para a área de transferência');
-    }).catch(err => {
-      console.error('Erro ao copiar o token:', err);
-    });
+    navigator.clipboard
+      .writeText(this.token)
+      .then(() => {
+        console.log('Token copiado para a área de transferência');
+        this.tokenCopied = true;
+      })
+      .catch((err) => {
+        console.error('Erro ao copiar o token:', err);
+      });
   }
 }
